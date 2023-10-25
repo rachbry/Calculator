@@ -29,21 +29,29 @@ class Calculator {
             this.operation = undefined;
             this.previousOperand = '';
             // pow 2
-        } else if (operation === 'x²') {
+        }
+        else if (operation === 'x²') {
             if (this.currentOperand === '') return;
             this.currentOperand = Math.pow(parseFloat(this.currentOperand), 2);
             this.operation = undefined;
             this.previousOperand = '';
-        } else if (operation === 'x³') {
+        }
+        else if (operation === 'x³') {
             if (this.currentOperand === '') return;
             this.currentOperand = Math.pow(parseFloat(this.currentOperand), 3);
             this.operation = undefined;
             this.previousOperand = '';
         }
+        else if (operation === '%') {
+            if (this.currentOperand === '') return;
+            this.previousOperand = this.currentOperand;
+            this.currentOperand = '';
+            this.operation = '%';
+        }
         else {
         if (this.currentOperand === '') return
         if (this.previousOperand !== '') {
-            this.compute()
+            this.compute();
         }
         this.operation = operation
         this.previousOperand = this.currentOperand
@@ -53,22 +61,24 @@ class Calculator {
 
     compute() {
         let computation
-        const prev = parseFloat(this.previousOperand)
-        const current = parseFloat(this.currentOperand)
+        const prev = parseFloat(this.previousOperand);
+        const current = parseFloat(this.currentOperand);
         if (isNaN(prev) || isNaN(current)) return
         switch (this.operation) {
             case '+':
-                computation = prev + current
+                computation = prev + current;
                 break
             case '-':
-                computation = prev - current
+                computation = prev - current;
                 break
             case 'x':
-                computation = prev * current
+                computation = prev * current;
                 break
             case '÷':
-                computation = prev / current
+                computation = prev / current;
                 break
+            case '%':
+                computation = (prev / 100) * current;
                 // sqrt
             case '√':
                 break
@@ -111,7 +121,7 @@ class Calculator {
         if (this.operation != null) {
             if (this.operation === '√') {
                 // don't think this is working
-                this.previousOperandTextElement.innerText = `${this.operation} ${this.getDisplayNumber(this.currentOperand)}`;
+                this.previousOperandTextElement.innerText = `${this.operation} ${this.getDisplayNumber(this.previousOperand)}`;
             } else {
                 this.previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
             }
@@ -129,44 +139,51 @@ const allClearButton = document.querySelector('[data-all-clear]');
 const previousOperandTextElement = document.querySelector('[data-previous-operand]');
 const currentOperandTextElement = document.querySelector('[data-current-operand]');
 // new buttons
+const percentageButton = document.querySelector('[data-percentage]');
 const piButton = document.querySelector('[data-pi]');
 const sqrtButton = document.querySelector('[data-sqrt]');
 const pow2Button = document.querySelector('[data-pow-two]');
 const pow3Button = document.querySelector('[data-pow-three]');
+const toggleButton = document.querySelector('[data-toggle-sign]');
 
 
 const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement)
 
 numberButtons.forEach(button => {
     button.addEventListener('click', () => {
-        calculator.appendNumber(button.innerText)
-        calculator.updateDisplay()
+        calculator.appendNumber(button.innerText);
+        calculator.updateDisplay();
     })
 })
 
 operationButtons.forEach(button => {
     button.addEventListener('click', () => {
-        calculator.chooseOperation(button.innerText)
-        calculator.updateDisplay()
+        calculator.chooseOperation(button.innerText);
+        calculator.updateDisplay();
     })
 })
 
 equalsButton.addEventListener('click', button => {
-    calculator.compute()
-    calculator.updateDisplay()
+    calculator.compute();
+    calculator.updateDisplay();
 })
 
 allClearButton.addEventListener('click', button => {
-    calculator.clear()
-    calculator.updateDisplay()
+    calculator.clear();
+    calculator.updateDisplay();
 })
 
 deleteButton.addEventListener('click', button => {
-    calculator.delete()
-    calculator.updateDisplay()
+    calculator.delete();
+    calculator.updateDisplay();
 })
 
 // new buttons
+
+percentageButton.addEventListener('click', () => {
+    calculator.chooseOperation('%');
+    calculator.updateDisplay();
+})
 
 piButton.addEventListener('click', () => {
     calculator.appendNumber(Math.PI);
@@ -189,4 +206,11 @@ pow3Button.addEventListener('click', () => {
     calculator.chooseOperation('x³');
     calculator.compute();
     calculator.updateDisplay();
+})
+
+toggleButton.addEventListener('click', () => {
+    if (calculator.currentOperand !== "") {
+        calculator.currentOperand = -calculator.currentOperand; // Toggle the display
+        calculator.updateDisplay(); // Update the display
+    }
 })
