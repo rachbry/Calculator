@@ -22,6 +22,25 @@ class Calculator {
     }
 
     chooseOperation(operation) {
+        // sqrt
+        if (operation === '√') {
+            if (this.currentOperand === '') return;
+            this.currentOperand = Math.sqrt(parseFloat(this.currentOperand));
+            this.operation = undefined;
+            this.previousOperand = '';
+            // pow 2
+        } else if (operation === 'x²') {
+            if (this.currentOperand === '') return;
+            this.currentOperand = Math.pow(parseFloat(this.currentOperand), 2);
+            this.operation = undefined;
+            this.previousOperand = '';
+        } else if (operation === 'x³') {
+            if (this.currentOperand === '') return;
+            this.currentOperand = Math.pow(parseFloat(this.currentOperand), 3);
+            this.operation = undefined;
+            this.previousOperand = '';
+        }
+        else {
         if (this.currentOperand === '') return
         if (this.previousOperand !== '') {
             this.compute()
@@ -29,6 +48,7 @@ class Calculator {
         this.operation = operation
         this.previousOperand = this.currentOperand
         this.currentOperand = ''
+    }
     }
 
     compute() {
@@ -48,6 +68,13 @@ class Calculator {
                 break
             case '÷':
                 computation = prev / current
+                break
+                // sqrt
+            case '√':
+                break
+            case 'x²':
+                break
+            case 'x³':
                 break
             default:
                 return
@@ -79,13 +106,17 @@ class Calculator {
     }
 
     updateDisplay() {
-        this.currentOperandTextElement.innerText =
-        this.getDisplayNumber(this.currentOperand)
+        this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
+
         if (this.operation != null) {
-        this.previousOperandTextElement.innerText =
-        `${this.previousOperand} ${this.operation}`
+            if (this.operation === '√') {
+                // don't think this is working
+                this.previousOperandTextElement.innerText = `${this.operation} ${this.getDisplayNumber(this.currentOperand)}`;
+            } else {
+                this.previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+            }
         } else {
-            this.previousOperandTextElement.innerText = ''
+            this.previousOperandTextElement.innerText = this.getDisplayNumber(this.previousOperand);
         }
     }
 }
@@ -97,6 +128,12 @@ const deleteButton = document.querySelector('[data-delete]');
 const allClearButton = document.querySelector('[data-all-clear]');
 const previousOperandTextElement = document.querySelector('[data-previous-operand]');
 const currentOperandTextElement = document.querySelector('[data-current-operand]');
+// new buttons
+const piButton = document.querySelector('[data-pi]');
+const sqrtButton = document.querySelector('[data-sqrt]');
+const pow2Button = document.querySelector('[data-pow-two]');
+const pow3Button = document.querySelector('[data-pow-three]');
+
 
 const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement)
 
@@ -129,4 +166,27 @@ deleteButton.addEventListener('click', button => {
     calculator.updateDisplay()
 })
 
+// new buttons
 
+piButton.addEventListener('click', () => {
+    calculator.appendNumber(Math.PI);
+    calculator.updateDisplay();
+})
+
+sqrtButton.addEventListener('click', () => {
+    calculator.chooseOperation('√');
+    calculator.compute();
+    calculator.updateDisplay();
+})
+
+pow2Button.addEventListener('click', () => {
+    calculator.chooseOperation('x²');
+    calculator.compute();
+    calculator.updateDisplay();
+})
+
+pow3Button.addEventListener('click', () => {
+    calculator.chooseOperation('x³');
+    calculator.compute();
+    calculator.updateDisplay();
+})
