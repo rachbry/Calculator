@@ -185,9 +185,14 @@ percentageButton.addEventListener('click', () => {
     calculator.updateDisplay();
 })
 
+// You can only click pi if there is no value in currentOperand
 piButton.addEventListener('click', () => {
-    calculator.appendNumber(Math.PI);
-    calculator.updateDisplay();
+    if (calculator.currentOperand === '') {
+        calculator.appendNumber(Math.PI);
+        calculator.updateDisplay();
+    } else {
+        return;
+    }
 })
 
 sqrtButton.addEventListener('click', () => {
@@ -210,7 +215,23 @@ pow3Button.addEventListener('click', () => {
 
 toggleButton.addEventListener('click', () => {
     if (calculator.currentOperand !== "") {
-        calculator.currentOperand = -calculator.currentOperand; // Toggle the display
-        calculator.updateDisplay(); // Update the display
+        calculator.currentOperand = -calculator.currentOperand;
+        calculator.updateDisplay();
     }
 })
+
+// Memory buttons//
+// const memoryAddButton = document.querySelector('[data-m-plus]');
+// const
+// const memory = '';
+
+
+// function saveToMemory() {
+//     memory = calculator.currentOperand;
+// }
+
+// function memoryRecall() {
+//     recallMemory = memory;
+//     calculator.updateDisplay();
+// }
+
