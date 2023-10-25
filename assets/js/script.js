@@ -140,23 +140,41 @@ class Calculator {
             return integerDisplay
         }
     }
+// PASTED OLD VERSION UNDERNEATH
+    // updateDisplay() {
+    //     this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
+
+    //     if (this.operation != null) {
+    //         if (this.operation === '%') {
+    //             this.previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+    //         }
+    //         else if (this.operation === '√') {
+    //             // don't think this is working
+    //             this.previousOperandTextElement.innerText = `${this.operation} ${this.getDisplayNumber(this.previousOperand)}`;
+    //         }
+    //         else if (this.operation === 'sin') {
+    //             this.currentOperandTextElement.innerText = `${this.operation}(${this.getDisplayNumber(this.currentOperand)})`;
+    //         }
+    //         else if (this.operation === 'tan') {
+    //             this.currentOperandTextElement.innerText = `${this.operation}(${this.getDisplayNumber(this.currentOperand)})`;
+    //         }
+    //         else if (this.operation === 'cos') {
+    //             this.currentOperandTextElement.innerText = `${this.operation}(${this.getDisplayNumber(this.currentOperand)})`;
+    //         }
+    //     }
+    //         else {
+    //         this.previousOperandTextElement.innerText = this.getDisplayNumber(this.previousOperand);
+    //         }
+    // }
 
     updateDisplay() {
         this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
 
         if (this.operation != null) {
-            if (this.operation === '%') {
+            if (this.operation === '√') {
+                this.previousOperandTextElement.innerText = `√(${this.getDisplayNumber(this.previousOperand)})`;
+            } else {
                 this.previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
-            }
-            else if (this.operation === '√') {
-                // don't think this is working
-                this.previousOperandTextElement.innerText = `${this.operation} ${this.getDisplayNumber(this.previousOperand)}`;
-            } else if (this.operation === 'sin') {
-                this.currentOperandTextElement.innerText = `${this.operation}(${this.getDisplayNumber(this.currentOperand)})`;
-            } else if (this.operation === 'tan') {
-                this.currentOperandTextElement.innerText = `${this.operation}(${this.getDisplayNumber(this.currentOperand)})`;
-            } else if (this.operation === 'cos') {
-                this.currentOperandTextElement.innerText = `${this.operation}(${this.getDisplayNumber(this.currentOperand)})`;
             }
         } else {
             this.previousOperandTextElement.innerText = this.getDisplayNumber(this.previousOperand);
