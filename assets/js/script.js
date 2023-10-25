@@ -42,6 +42,24 @@ class Calculator {
             this.operation = undefined;
             this.previousOperand = '';
         }
+        else if (operation === 'sin') {
+            if (this.currentOperand === '') return;
+            this.currentOperand = Math.sin(parseFloat(this.currentOperand));
+            this.operation = undefined;
+            this.previousOperand = '';
+        }
+        else if (operation === 'tan') {
+            if (this.currentOperand === '') return;
+            this.currentOperand = Math.tan(parseFloat(this.currentOperand));
+            this.operation = undefined;
+            this.previousOperand = '';
+        }
+        else if (operation === 'cos') {
+            if (this.currentOperand === '') return;
+            this.currentOperand = Math.cos(parseFloat(this.currentOperand));
+            this.operation = undefined;
+            this.previousOperand = '';
+        }
         else if (operation === '%') {
             if (this.currentOperand === '') return;
             this.previousOperand = this.currentOperand;
@@ -49,14 +67,15 @@ class Calculator {
             this.operation = '%';
         }
         else {
-        if (this.currentOperand === '') return
-        if (this.previousOperand !== '') {
-            this.compute();
+            if (this.currentOperand === '') return
+            if (this.previousOperand !== '') {
+                this.compute();
+            }
+
+            this.operation = operation
+            this.previousOperand = this.currentOperand
+            this.currentOperand = ''
         }
-        this.operation = operation
-        this.previousOperand = this.currentOperand
-        this.currentOperand = ''
-    }
     }
 
     compute() {
@@ -79,12 +98,18 @@ class Calculator {
                 break
             case '%':
                 computation = (prev / 100) * current;
-                // sqrt
+            // sqrt
             case '√':
                 break
             case 'x²':
                 break
             case 'x³':
+                break
+            case 'sin':
+                break
+            case 'cos':
+                break
+            case 'tan':
                 break
             default:
                 return
@@ -93,11 +118,11 @@ class Calculator {
         this.operation = undefined
         this.previousOperand = ''
     }
-/**
- * Adds commas to long numbers to tidy up the display.
- * Splits at decimal to ensure correct placement of commas
- */
-    getDisplayNumber(number){
+    /**
+     * Adds commas to long numbers to tidy up the display.
+     * Splits at decimal to ensure correct placement of commas
+     */
+    getDisplayNumber(number) {
         const stringNumber = number.toString()
         const integerDigits = parseFloat(stringNumber.split('.')[0])
         const decimalDigits = stringNumber.split('.')[1]
@@ -106,7 +131,8 @@ class Calculator {
             integerDisplay = ''
         } else {
             integerDisplay = integerDigits.toLocaleString('en', {
-                maximumFractionDigits: 0 })
+                maximumFractionDigits: 0
+            })
         }
         if (decimalDigits != null) {
             return `${integerDisplay}.${decimalDigits}`
@@ -119,11 +145,18 @@ class Calculator {
         this.currentOperandTextElement.innerText = this.getDisplayNumber(this.currentOperand);
 
         if (this.operation != null) {
-            if (this.operation === '√') {
+            if (this.operation === '%') {
+                this.previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+            }
+            else if (this.operation === '√') {
                 // don't think this is working
                 this.previousOperandTextElement.innerText = `${this.operation} ${this.getDisplayNumber(this.previousOperand)}`;
-            } else {
-                this.previousOperandTextElement.innerText = `${this.getDisplayNumber(this.previousOperand)} ${this.operation}`;
+            } else if (this.operation === 'sin') {
+                this.currentOperandTextElement.innerText = `${this.operation}(${this.getDisplayNumber(this.currentOperand)})`;
+            } else if (this.operation === 'tan') {
+                this.currentOperandTextElement.innerText = `${this.operation}(${this.getDisplayNumber(this.currentOperand)})`;
+            } else if (this.operation === 'cos') {
+                this.currentOperandTextElement.innerText = `${this.operation}(${this.getDisplayNumber(this.currentOperand)})`;
             }
         } else {
             this.previousOperandTextElement.innerText = this.getDisplayNumber(this.previousOperand);
@@ -145,6 +178,10 @@ const sqrtButton = document.querySelector('[data-sqrt]');
 const pow2Button = document.querySelector('[data-pow-two]');
 const pow3Button = document.querySelector('[data-pow-three]');
 const toggleButton = document.querySelector('[data-toggle-sign]');
+
+const sinButton = document.querySelector('[data-sin]');
+const cosButton = document.querySelector('[data-cos]');
+const tanButton = document.querySelector('[data-tan]');
 
 
 const calculator = new Calculator(previousOperandTextElement, currentOperandTextElement)
@@ -220,18 +257,44 @@ toggleButton.addEventListener('click', () => {
     }
 })
 
+sinButton.addEventListener('click', () => {
+    calculator.chooseOperation('sin');
+    calculator.compute();
+    calculator.updateDisplay();
+})
+
+tanButton.addEventListener('click', () => {
+    calculator.chooseOperation('tan');
+    calculator.compute();
+    calculator.updateDisplay();
+})
+
+cosButton.addEventListener('click', () => {
+    calculator.chooseOperation('cos');
+    calculator.compute();
+    calculator.updateDisplay();
+})
+
+
 // Memory buttons//
-// const memoryAddButton = document.querySelector('[data-m-plus]');
-// const
-// const memory = '';
+const memoryAddButton = document.querySelector('[data-m-plus]');
+const memoryRecallButton = document.querySelector('[data-m-recall]');
+let memory = '';
 
 
-// function saveToMemory() {
-//     memory = calculator.currentOperand;
-// }
+memoryAddButton.addEventListener('click', () => {
+    if (calculator.currentOperand !== '') {
+        memory = calculator.currentOperand;
+        console.log(memory)
+    }
+});
 
-// function memoryRecall() {
-//     recallMemory = memory;
-//     calculator.updateDisplay();
-// }
+// This works although you can enter a number after the number is recalled
+memoryRecallButton.addEventListener('click', () => {
+    if (memory) {
+        calculator.currentOperand = memory;
+        calculator.updateDisplay();
+    }
+});
+
 
